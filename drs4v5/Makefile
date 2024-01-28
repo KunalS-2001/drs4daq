@@ -1,11 +1,11 @@
-########################################################
-#
-#  Makefile for drsosc, drscl and drs_exam 
-#  executables under linux
-#
-#  Requires wxWidgets 2.8.9 or newer
-#
-########################################################
+#################################################################################
+#										#
+#  Makefile for drsosc, drscl and drs_exam muonDet tdcDAQ ramAcces		#
+#  executables under linux							#
+#										#
+#  Requires wxWidgets 2.8.9 or newer						#
+#										#
+#################################################################################
 
 IDIR=include
 SRCDIR=src
@@ -53,15 +53,21 @@ see:
 	echo $(CPP_OBJ) $(OBJECTS)
 
 ifeq ($(OS),Darwin)
-all: drs_exam muonDet
+all: drs_exam muonDet tdcDAQ
 else
-all: muonDet drs_exam
+all: muonDet drs_exam tdcDAQ
 endif
 
 drs_exam: $(OBJECTS) $(OBJDIR)/drs_exam.o
 	$(CXX) $(CFLAGS) $^ -o drs_exam $(LIBS) $(WXLIBS)
 
 muonDet: $(OBJECTS) $(CPP_OBJ) $(OBJDIR)/DRS4v5_lib.o $(OBJDIR)/muonDet.o $(OBJDIR)/musbstd.o
+	$(CXX) $(CFLAGS)  $^ -o $@ $(LIBS) $(WXLIBS)
+	
+tdcDAQ: $(OBJECTS) $(CPP_OBJ) $(OBJDIR)/DRS4v5_lib.o $(OBJDIR)/tdcDAQ.o $(OBJDIR)/musbstd.o
+	$(CXX) $(CFLAGS)  $^ -o $@ $(LIBS) $(WXLIBS)
+
+ramAcces: $(OBJECTS) $(CPP_OBJ) $(OBJDIR)/DRS4v5_lib.o $(OBJDIR)/ramAcces.o $(OBJDIR)/musbstd.o
 	$(CXX) $(CFLAGS)  $^ -o $@ $(LIBS) $(WXLIBS)
 
 try: $(OBJDIR)/DRS4v5_lib.o $(OBJDIR)/try.o 
@@ -74,6 +80,12 @@ $(OBJDIR)/drs_exam.o: $(SRCDIR)/drs_exam.cpp $(IDIR)/mxml.h $(IDIR)/DRS.h
 	$(CXX) $(CFLAGS) -c $< -o $@ 
 
 $(OBJDIR)/muonDet.o: $(SRCDIR)/muonDet.cpp $(IDIR)/mxml.h $(IDIR)/DRS.h
+	$(CXX) $(CFLAGS) -c $< -o $@
+	
+$(OBJDIR)/tdcDAQ.o: $(SRCDIR)/tdcDAQ.cpp $(IDIR)/mxml.h $(IDIR)/DRS.h
+	$(CXX) $(CFLAGS) -c $< -o $@  
+
+$(OBJDIR)/ramAcces.o: $(SRCDIR)/ramAcces.cpp $(IDIR)/mxml.h $(IDIR)/DRS.h
 	$(CXX) $(CFLAGS) -c $< -o $@ 
 
 $(OBJDIR)/try.o: $(SRCDIR)/try.cpp $(SRCDIR)/DRS4v5_lib.cpp $(IDIR)/DRS4v5_lib.h $(IDIR)/drsoscBinary.h
@@ -90,5 +102,5 @@ $(OBJECTS):$(OBJDIR)/%.o: $(SRCDIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@ 
 
 clean:
-	rm -f *.o obj/*.o lib/*.so drs_exam muonDet try 
+	rm -f *.o obj/*.o lib/*.so drs_exam muonDet try tdcDAQ ramAcces
 
