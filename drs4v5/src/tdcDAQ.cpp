@@ -1,6 +1,6 @@
 /********************************************************************\
 
-  Name:         muonDet.cpp
+  Name:         tdcDAQ.cpp
 
   Contents:     Simple application to read out a DRS4 board
   				and integrate peaks to get the charge
